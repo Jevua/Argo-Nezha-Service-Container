@@ -114,9 +114,6 @@ EOF
   unzip /tmp/dashboard.zip -d /tmp
   mv -f /tmp/dist/dashboard-linux-$ARCH $WORK_DIR/app
   wget -qO $WORK_DIR/cloudflared ${GH_PROXY}https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$ARCH
-  wget -O $WORK_DIR/nezha-agent.zip ${GH_PROXY}https://github.com/nezhahq/agent/releases/latest/download/nezha-agent_linux_$ARCH.zip
-  unzip $WORK_DIR/nezha-agent.zip -d $WORK_DIR/
-  rm -rf $WORK_DIR/nezha-agent.zip /tmp/dist /tmp/dashboard.zip
 
   # 根据参数生成哪吒服务端配置文件
   [ ! -d data ] && mkdir data
@@ -267,13 +264,6 @@ autorestart=true
 stderr_logfile=/dev/null
 stdout_logfile=/dev/null
 
-[program:agent]
-command=$WORK_DIR/nezha-agent -s localhost:$GRPC_PORT -p $LOCAL_TOKEN
-autostart=true
-autorestart=true
-stderr_logfile=/dev/null
-stdout_logfile=/dev/null
-
 [program:argo]
 command=$WORK_DIR/$ARGO_RUN
 autostart=true
@@ -283,7 +273,7 @@ stdout_logfile=/dev/null
 EOF
 
   # 赋执行权给 sh 及所有应用
-  chmod +x $WORK_DIR/{cloudflared,nezha-agent,*.sh}
+  chmod +x $WORK_DIR/{cloudflared,*.sh}
 
 fi
 
